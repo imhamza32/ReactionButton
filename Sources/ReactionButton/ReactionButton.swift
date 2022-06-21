@@ -70,13 +70,15 @@ open class ReactionButton: UIButton {
     
     private func setup() {
         addGestureRecognizer(UILongPressGestureRecognizer(target: self,
-                                                          action: #selector(ReactionButton.handlePress(sender:))))
+                                                          action: #selector(ReactionButton.handleLongPress(sender:))))
+        addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                          action: #selector(ReactionButton.handleTap(sender:))))
     }
     
     // MARK: - Visual component interaction / animation
     
     /// Function that open and expand the Options Selector.
-    @objc private func handlePress(sender: UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             expand()
@@ -86,6 +88,15 @@ open class ReactionButton: UIButton {
         case .ended:
             collapse()
         default: break
+        }
+    }
+    
+    @objc private func handleTap (sender: UITapGestureRecognizer) {
+        if selectedItem != nil {
+            selectedItem = nil
+        } else {
+            selectedItem = 0
+            self.delegate?.ReactionSelector(self, didSelectedIndex: selectedItem!)
         }
     }
     
